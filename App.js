@@ -7,7 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 //função para criar a navegação
 import createAppbarStyle from './src/utils/createAppBar'
 import HomeScreen     from './src/screens/HomeScreen'
-import ListagemScreen from './src/screens/ListagemScreen';
+import NoticiasScreen from './src/screens/NoticiasScreen';
 import CadastroScreen from './src/screens/CadastroScreen';
 
 const Stack = createStackNavigator()
@@ -17,9 +17,9 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home"     component={HomeScreen}     options={createAppbarStyle('Imobiliaria')} />
-          <Stack.Screen name="Listagem" component={ListagemScreen} options={createAppbarStyle('Imobiliaria')} />
-          <Stack.Screen name="Cadastro" component={CadastroScreen} options={createAppbarStyle('Imobiliaria')} />
+          <Stack.Screen name="Home"     component={HomeScreen}     options={createAppbarStyle('Psicóloga Daniela Vieira')} />
+          <Stack.Screen name="Noticias" component={NoticiasScreen} options={createAppbarStyle('Notícias')} />
+          <Stack.Screen name="Cadastro" component={CadastroScreen} options={createAppbarStyle('Cadastrar')} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

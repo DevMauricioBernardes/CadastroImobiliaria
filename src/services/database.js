@@ -1,22 +1,20 @@
-import Anuncio from '../models/anuncio'
+import Noticia from '../models/noticia'
 import LDatabase from './ldatabase'
 
 export default class Database{
     constructor(){
-        this.table_name = 'anuncios'
-        this.db = new LDatabase('Anunciosdata.db', (db) => {
+        this.table_name = 'noticias'
+        this.db = new LDatabase('Noticiasdata.db', (db) => {
             db.executeQuery(`CREATE TABLE IF NOT EXISTS ${this.table_name}(
                 id integer primary key autoincrement, 
-                name text, 
-                price integer, 
-                image text, 
-                address text, 
-                final integer, 
-                type integer);`, () => {}, (error) => {console.log(error)})
+                titulo text, 
+                corpo text, 
+                image text 
+                );`, () => {}, (error) => {console.log(error)})
         console.log("Banco de dados conectado")
         })
     }
-    loadAnuncios(){
+    loadNoticias(){
         return new Promise(resolve => {
             this.db.executeQuery(`SELECT * FROM ${this.table_name}`, (_, res) => {
                 resolve(res.rows._array)
@@ -24,7 +22,7 @@ export default class Database{
         })
     }
 // arrumar XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    loadAnunciosWithTypeFilter(){
+    loadNoticiasWithTypeFilter(){
         return new Promise(resolve => {
             this.db.executeQuery(`SELECT * FROM ${this.table_name}`, (_, res) => {
                 resolve(res.rows._array)
@@ -33,7 +31,7 @@ export default class Database{
     }
 
 // arrumar XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX    
-    loadAnunciosByFinal(){
+    loadNoticiasByFinal(){
         return new Promise(resolve => {
             this.db.executeQuery(`SELECT * FROM ${this.table_name}`, (_, res) => {
                 resolve(res.rows._array)
@@ -43,7 +41,7 @@ export default class Database{
     }
 
 // arrumar XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX    
-    delAnuncio(){
+    delNoticias(){
         return new Promise(resolve => {
             this.db.executeQuery(`DELETE ${this.table_name}`, (_, res) => {
                 resolve(res.rows._array)
@@ -53,7 +51,7 @@ export default class Database{
     }
 
 // arrumar XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX    
-    loadAnunciosById(){
+    loadNoticiasById(){
         return new Promise(resolve => {
             this.db.executeQuery(`SELECT * FROM ${this.table_name}`, (_, res) => {
                 resolve(res.rows._array)
@@ -62,10 +60,10 @@ export default class Database{
 
     }
     
-    addNewAnuncio(anuncio=new Anuncio()){
+    addNewNoticia(noticia=new Noticia()){
         return new Promise(resolve => {
-            if(anuncio.isValidWithOutId()){
-                const query = `INSERT INTO ${this.table_name} (name, price, image, address, final, type) VALUES ('${anuncio.name}', ${anuncio.price}, '${anuncio.image}', '${anuncio.address}', ${anuncio.final}, ${anuncio.type});`
+            if(noticia.isValidWithOutId()){
+                const query = `INSERT INTO ${this.table_name} (titulo, corpo, image) VALUES ('${noticia.titulo}', '${noticia.corpo}', '${noticia.image}');`
                 this.db.executeQuery(query, ()=>resolve(true), (_)=>{console.log(_); resolve(false)})
             }else resolve(false)
         })

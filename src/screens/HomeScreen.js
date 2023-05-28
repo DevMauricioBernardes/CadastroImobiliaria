@@ -15,8 +15,8 @@ export default class HomeScreen extends React.Component{
             <View style={{marginHorizontal: 10}}>
                 <View style={{marginBottom: 5, marginTop: 500}}>
                 <Button 
-                    title='Lista'
-                    onPress={() => {this.navigation.push('Listagem',{})}}
+                    title='Noticias'
+                    onPress={() => {this.navigation.push('Noticias',{})}}
                 />
                 </View>
                 <Button

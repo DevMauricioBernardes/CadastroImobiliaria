@@ -3,7 +3,7 @@ import { Text, View, ScrollView, Image, Button } from 'react-native'
 import {Input} from 'react-native-elements'
 
 import DatabaseClass from '../services/database'
-import Anuncio       from '../models/anuncio'
+import Noticia       from '../models/noticia'
 import SimplePicker  from '../components/SimplePicker'
 import ImagePicker   from '../components/ImagePicker'
 
@@ -11,47 +11,31 @@ class CadastroScreen extends Component{
     constructor(props){
         super(props)
         this.db = new DatabaseClass()
-        this.navigation = props.navigation
-        this.types = [
-            { label: 'Casa',       value: 1, },
-            { label: 'Comércio',   value: 2, },
-            { label: 'Condomínio', value: 3, },
-        ]
-        this.final = [
-            { label: 'Alugar', value: 1, },
-            { label: 'Vender', value: 2, },
-        ]
+        this.navigation = props.navigation  
         this.state = {
-            anuncio_name: '',
-            anuncio_price: 0.0,
-            anuncio_address: '',
-            anuncio_final: 1,
-            anuncio_type: 1,
-            anuncio_image: ''
+            noticia_titulo: '',
+            noticia_corpo: '',            
+            noticia_image: ''
         }
     }
     render(){
         return (
             <View>
                 <ScrollView>
-                    <Text style={{textAlign: 'center', marginVertical: 10}}>Cadastro de anúncio</Text>
-                    <Input placeholder="Nome" containerStyle={{marginTop: 20}} onChangeText={text => this.setState({anuncio_name: text})} maxLength={20}/>
-                    <Input placeholder="Endereço" onChangeText={text => this.setState({anuncio_address: text})} maxLength={60}/>
-                    <Input placeholder="Preço"    onChangeText={text => this.setState({anuncio_price: text})} keyboardType='numeric' maxLength={12}/>
-                    
-                    <SimplePicker onChange={(value)=>this.setState({ anuncio_type: value })} values={this.types}/>
-                    <SimplePicker onChange={(value)=>this.setState({ anuncio_final: value })} values={this.final}/>
+                    <Text style={{textAlign: 'center', marginVertical: 10}}>Cadastro de notícias</Text>
+                    <Input placeholder="Título" onChangeText={text => this.setState({noticia_titulo: text})} maxLength={50}/>
+                    <Input placeholder="Corpo" onChangeText={text => this.setState({noticia_corpo: text})} maxLength={10000}/>  
                     
                     <View style={{marginHorizontal: 10}}>
                         <View style={{marginBottom: 5}}>
-                        <ImagePicker title="Carregar foto" usePhotoFromLibrary={true} onTakePhoto={(uri)=>this.setState({anuncio_image: uri})}/>
+                        <ImagePicker title="Carregar foto" usePhotoFromLibrary={true} onTakePhoto={(uri)=>this.setState({noticia_image: uri})}/>
                         </View>                        
-                        <ImagePicker title="Tirar foto"    saveCameraImage={true}     onTakePhoto={(uri)=>this.setState({anuncio_image: uri})}/>
+                        <ImagePicker title="Tirar foto"    saveCameraImage={true}     onTakePhoto={(uri)=>this.setState({noticia_image: uri})}/>
                     </View>
 
-                    {this.state.anuncio_image ? 
+                    {this.state.noticia_image ? 
                     <View>
-                    <Image style={{margin: 10, alignSelf: 'center', width: '100%', height: 250}} source={{uri: this.state.anuncio_image}}/>
+                    <Image style={{margin: 10, alignSelf: 'center', width: '100%', height: 250}} source={{uri: this.state.noticia_image}}/>
                         
                     </View>
                     : 
@@ -65,23 +49,22 @@ class CadastroScreen extends Component{
         )
     }
     add_address = (()=>{
-        let anuncio = new Anuncio({
-            name:    this.state.anuncio_name,
-            image:   this.state.anuncio_image,
-            price:   this.state.anuncio_price,
-            address: this.state.anuncio_address,
-            final:   this.state.anuncio_final,
-            type:    this.state.anuncio_type,
+        let noticia = new Noticia({
+            titulo:    this.state.noticia_titulo,
+            corpo:   this.state.noticia_corpo,
+            image:   this.state.noticia_image,
+            
         })
-        if(!anuncio.isValidWithOutId()){
+        console.log('teste1')
+        if(!noticia.isValidWithOutId()){
             alert('Por favor preencha todos os campos!')
             return
         }
-        this.db.addNewAnuncio(anuncio).then(result => {
+        this.db.addNewNoticia(noticia).then(result => {
             if(result){
                 this.navigation.pop()
-                this.sendAnuncioNotification(anuncio)
-            }else alert("Erro ao cadastrar anúncio!"+anuncio.name)
+                this.sendNoticiaNotification(noticia)
+            }else alert("Erro ao cadastrar anúncio!"+noticia.titulo)
         })
     }).bind(this)
 
